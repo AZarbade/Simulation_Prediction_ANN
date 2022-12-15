@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-def impute(csv, cols):
+def impute(dataframe, cols):
     # reading data
-    df = pd.read_csv(csv)
+    df = dataframe
 
     # checking for "nulls" and "zeros"
     print(f'Checking NaNs:\n{df.isna().sum()}')
