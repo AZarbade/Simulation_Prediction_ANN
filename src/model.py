@@ -1,6 +1,8 @@
-# Imports
+# * ---------- Imports ---------- * #
+import wandb
 import pandas as pd
 import numpy as np
+import os
 
 import torch
 import torch.nn as nn
@@ -19,8 +21,7 @@ print(f'PyTorch is using {device}')
 from dataUtils import impute, normalize
 import functions as fun
 
-# --------------------
-
+# * ---------- Code ---------- * #
 # TODO: Data =>
 # ///TODO:     - data imputation
 # ///TODO:     - data OneHotEncoding
@@ -31,15 +32,17 @@ import functions as fun
 # TODO:     - Low capacity network
 
 # * ---------- Project Parameters ---------- * #
+
 TRAIN_SET = 'data/train.csv'
 SEED = 1024
 VAL_SPLIT = 0.2
 BATCH_SIZE = 16
 NEURONS = 64
 LR = 0.003
-EPOCHS = 640
+EPOCHS = 100
 DROPOUT = 0.2
 FOLDS = 5
+MODEL_NAME = 'DNN_seqNet'
 
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
@@ -155,6 +158,17 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'\n---------- * ----------')
     print(f'FOLD {fold}')
 
+    wandb.init(project="my-fold-project", group=f'{MODEL_NAME}', name=f'fold_{fold}', job_type="training")
+
+    wandb.config = {
+        "learning_rate": LR,
+        "epochs": EPOCHS,
+        "batch_size": BATCH_SIZE,
+        "neurons": NEURONS,
+        "dropout": DROPOUT,
+        "kfolds": FOLDS
+    }
+
     # Sample elements randomly from a given list of ids, no replacement
     train_sampler = SubsetRandomSampler(train_ids)
     valid_sampler = SubsetRandomSampler(valid_ids)
@@ -187,6 +201,13 @@ for fold, (train_ids, valid_ids) in f_loop:
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
 
+        # wandb loggers
+        wandb.log({
+            "train loss": train_loss,
+            "valid loss": valid_loss,
+            "epoch": epoch
+            })
+
         # update progress bar
         loop.set_description(f'Current epoch: {epoch}/{EPOCHS}')
         loop.set_postfix(train_loss = train_loss, valid_loss = valid_loss)
@@ -200,6 +221,8 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'Training loss for fold-{fold}: {train_loss}')
     print(f'Validation loss for fold-{fold}: {valid_loss}')
 
+    # Close run for this fold
+    wandb.join()
 
 # Print fold results
 print(f'K-FOLD CROSS VALIDATION RESULTS FOR {FOLDS} FOLDS')
