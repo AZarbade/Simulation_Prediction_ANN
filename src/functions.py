@@ -1,21 +1,40 @@
-# Imports
+# * ---------- Imports ---------- * #
+import wandb
 import pandas as pd
 import numpy as np
+import os
 
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
 import torchmetrics as tm
-from torch.utils.data import Dataset, DataLoader
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+from torch.utils.data import Dataset, DataLoader, SubsetRandomSampler
 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from tqdm import tqdm
 
-# * ---------- Creating Functions ---------- * #
-class Seq_01(nn.Module):
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# Personal libraries
+from dataUtils import impute, normalize
+
+# * ---------- Functions ---------- * #
+class myDataset(Dataset):
+    def __init__(self, features, targets):
+        self.features = features
+        self.targets = targets
+
+    def __len__(self):
+        return len(self.features)
+
+    def __getitem__(self, index):
+        return self.features[index], self.targets[index]
+
+
+class 
+
+
+class DNN_seqNet(nn.Module):
     def __init__(self, in_dims, out_dims, neurons, dropout) -> None:
         super().__init__()
         self.seq_01 = nn.modules.Sequential(
@@ -38,64 +57,49 @@ class Seq_01(nn.Module):
         return features
 
 
-def model_train(model, dataloader, loss_fn, optimizer):
-    model.train()
+def fitTraining(model, dataloader, loss_fn, optimizer):
     train_loss = 0
-    train_score = 0
+    size = len(dataloader)
+    model.train()
+    for data, labels in dataloader:
+        pred = model(data)
 
-    for batch, (features, targets) in enumerate(dataloader):
-        optimizer.zero_grad()
-        features = features.to(device)
-        targets = targets.to(device)
+        loss = loss_fn(pred, labels)
 
-        # compute prediction error
-        pred = model(features)
-        loss = loss_fn(pred, targets)
-        # score = tm.functional.r2_score(pred, targets)
-
-        # backpropagation
         loss.backward()
         optimizer.step()
+        optimizer.zero_grad()
 
         train_loss += loss.item()
-        # train_score = score.item()
+    
+    return train_loss / size
 
-        return train_loss
 
-
-def model_val(model, dataloader, loss_fn):
+def fitValidate(model, dataloader, loss_fn):
+    size = len(dataloader)
+    valid_loss = 0
     model.eval()
-    test_loss = 0
-    test_score = 0
+    for data, labels in dataloader:
+        pred = model(data)
 
-    with torch.no_grad():
-        for (features, targets) in dataloader:
-            features = features.to(device)
-            targets = targets.to(device)
+        loss = loss_fn(pred, labels)
 
-            pred = model(features)
-            test_loss += loss_fn(pred, targets).item()
-            # score = tm.functional.r2_score(pred, targets).item()
-
-            # test_score = score
-
-            return test_loss
+        valid_loss += loss.item()
+    
+    return valid_loss / size
 
 
-class build_dataset(Dataset):
-    # Building Custom Dataset
-    def __init__(self, features, labels):
-        self.features = features
-        self.labels = labels
+def meanie(answer):
+    mean = sum(answer) / len(answer)
+    return mean
 
-    def __len__(self):
-        return self.features.shape[0]
 
-    def __getitem__(self, idx):
-        current_feature = self.features[idx, :]
-        current_label = self.labels[idx]
-
-        features = torch.tensor(current_feature, dtype=torch.float32)
-        labels = torch.tensor(current_label, dtype=torch.float32)
-
-        return features, labels
+def reset_weights(m):
+  '''
+    Try resetting model weights to avoid
+    weight leakage.
+  '''
+  for layer in m.children():
+   if hasattr(layer, 'reset_parameters'):
+    print(f'Reset trainable parameters of layer = {layer}')
+    layer.reset_parameters()

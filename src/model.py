@@ -39,10 +39,21 @@ VAL_SPLIT = 0.2
 BATCH_SIZE = 16
 NEURONS = 64
 LR = 0.003
-EPOCHS = 640
+EPOCHS = 100
 DROPOUT = 0.2
 FOLDS = 5
-MODEL_NAME = 'DNN_seqNet'
+MODEL_NAME = 'DNN_seqNet_1'
+
+# wandb init
+config = {
+    "learning_rate": LR,
+    "epochs": EPOCHS,
+    "batch_size": BATCH_SIZE,
+    "neurons": NEURONS,
+    "dropout": DROPOUT,
+    "kfolds": FOLDS
+}
+
 
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
@@ -90,7 +101,7 @@ class DNN_seqNet(nn.Module):
         return features
 
 
-def fitTraining(dataloader, loss_fn, optimizer):
+def fitTraining(model, dataloader, loss_fn, optimizer):
     train_loss = 0
     size = len(dataloader)
     model.train()
@@ -108,7 +119,7 @@ def fitTraining(dataloader, loss_fn, optimizer):
     return train_loss / size
 
 
-def fitValidate(dataloader, loss_fn):
+def fitValidate(model, dataloader, loss_fn):
     size = len(dataloader)
     valid_loss = 0
     model.eval()
@@ -158,16 +169,12 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'\n---------- * ----------')
     print(f'FOLD {fold}')
 
-    wandb.init(project="my-fold-project", group=f'{MODEL_NAME}', name=f'fold_{fold}', job_type="training")
-
-    wandb.config = {
-        "learning_rate": LR,
-        "epochs": EPOCHS,
-        "batch_size": BATCH_SIZE,
-        "neurons": NEURONS,
-        "dropout": DROPOUT,
-        "kfolds": FOLDS
-    }
+    MODEL_NAME = MODEL_NAME
+    leaf = wandb.init(group=f'{MODEL_NAME}',
+                        name=f'fold_{fold}',
+                        job_type="training",
+                        project="my-fold-project",
+                        config=config)
 
     # Sample elements randomly from a given list of ids, no replacement
     train_sampler = SubsetRandomSampler(train_ids)
@@ -192,11 +199,11 @@ for fold, (train_ids, valid_ids) in f_loop:
     loop = tqdm(range(EPOCHS))
     for epoch in loop:
         # Starting Training...
-        train_loss = fitTraining(train_loader, criterion, optimizer)
+        train_loss = fitTraining(model, train_loader, criterion, optimizer)
 
         # Starting Validation...
         with torch.no_grad():
-            valid_loss = fitValidate(valid_loader, criterion)
+            valid_loss = fitValidate(model, valid_loader, criterion)
 
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
@@ -222,7 +229,7 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'Validation loss for fold-{fold}: {valid_loss}')
 
     # Close run for this fold
-    wandb.join()
+    leaf.finish()
 
 # Print fold results
 print(f'K-FOLD CROSS VALIDATION RESULTS FOR {FOLDS} FOLDS')
