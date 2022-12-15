@@ -1,0 +1,70 @@
+(pt) hackerman:HVIS_redesign master ✗ 7h54m △ ◒ ➜ /home/hackerman/miniconda3/envs/pt/bin/python /home/hackerman/projects/HVIS_redesign
+/src/model.py
+PyTorch version: 1.13.0
+PyTorch is using cuda
+Checking NaNs:
+LD                 0
+Velocity (km/s)    0
+a (degrees)        0
+$ (degrees)        0
+DI                 0
+dtype: int64
+
+---------- * ----------
+FOLD 0
+Reset trainable parameters of layer = Linear(in_features=7, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=1, bias=True)
+Current epoch: 639/640: 100%|█████████████████████████████████| 640/640 [01:31<00:00,  6.97it/s, train_loss=0.0731, valid_loss=0.0889]
+Training process has finished. Saving trained model...
+Training loss for fold-0: 0.07305940217560246
+Validation loss for fold-0: 0.08893418491438583
+
+---------- * ----------
+FOLD 1
+Reset trainable parameters of layer = Linear(in_features=7, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=1, bias=True)
+Current epoch: 639/640: 100%|█████████████████████████████████| 640/640 [01:41<00:00,  6.33it/s, train_loss=0.0744, valid_loss=0.0635]
+Training process has finished. Saving trained model...
+Training loss for fold-1: 0.07441416116697448
+Validation loss for fold-1: 0.06350798932490526
+
+---------- * ----------
+FOLD 2
+Reset trainable parameters of layer = Linear(in_features=7, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=1, bias=True)
+Current epoch: 639/640: 100%|█████████████████████████████████| 640/640 [01:42<00:00,  6.23it/s, train_loss=0.0846, valid_loss=0.0956]
+Training process has finished. Saving trained model...
+Training loss for fold-2: 0.08457463702985218
+Validation loss for fold-2: 0.0955665008061462
+
+---------- * ----------
+FOLD 3
+Reset trainable parameters of layer = Linear(in_features=7, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=1, bias=True)
+Current epoch: 639/640: 100%|█████████████████████████████████| 640/640 [01:30<00:00,  7.05it/s, train_loss=0.0721, valid_loss=0.0773]
+Training process has finished. Saving trained model...
+Training loss for fold-3: 0.07209811455437115
+Validation loss for fold-3: 0.07731544336786976
+
+---------- * ----------
+FOLD 4
+Reset trainable parameters of layer = Linear(in_features=7, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=64, bias=True)
+Reset trainable parameters of layer = Linear(in_features=64, out_features=1, bias=True)
+Current epoch: 639/640: 100%|██████████████████████████████████| 640/640 [01:31<00:00,  6.96it/s, train_loss=0.0772, valid_loss=0.055]
+Training process has finished. Saving trained model...
+Training loss for fold-4: 0.07715704125307855
+Validation loss for fold-4: 0.05502432909000803
+K-FOLD CROSS VALIDATION RESULTS FOR 5 FOLDS
+--------------------------------
+mean_train_loss: 0.08797220261463448
+mean_valid_loss: 0.08361262868404283

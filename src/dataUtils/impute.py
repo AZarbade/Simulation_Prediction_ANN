@@ -7,7 +7,7 @@ def impute(dataframe, cols):
 
     # checking for "nulls" and "zeros"
     print(f'Checking NaNs:\n{df.isna().sum()}')
-    print(f'Checking zeros:\n   {df[cols]} has: {df[cols].value_counts()[0]} zeros')
+    # print(f'Checking zeros:\n   {df[cols]} has: {df[cols].value_counts()[0]} zeros')
 
     # replacing zeros with nulls for easier processing
     df[cols] = df[cols].replace({
