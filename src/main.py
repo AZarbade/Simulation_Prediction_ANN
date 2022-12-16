@@ -35,12 +35,12 @@ import functions as fun
 TRAIN_SET = 'data/train.csv'
 SEED = 1024
 VAL_SPLIT = 0.2
-MODEL_NAME = 'DNN_seqNet_Sweeps'
+MODEL_NAME = 'DNN_seqNet'
 
 # wandb init
 config = {
     "learning_rate": 0.0003,
-    "epochs": 640,
+    "epochs": 100,
     "batch_size": 32,
     "neurons": 64,
     "dropout": 0.2,
@@ -89,7 +89,7 @@ for fold, (train_ids, valid_ids) in f_loop:
     leaf = wandb.init(group=f'{MODEL_NAME}',
                         name=f'fold_{fold}',
                         job_type="training",
-                        project="my-fold-project",
+                        project="HVIS-redesign",
                         config=config)
 
     # Sample elements randomly from a given list of ids, no replacement
