@@ -35,24 +35,25 @@ import functions as fun
 TRAIN_SET = 'data/train.csv'
 SEED = 1024
 VAL_SPLIT = 0.2
-BATCH_SIZE = 16
-NEURONS = 64
-LR = 0.003
-EPOCHS = 100
-DROPOUT = 0.2
-FOLDS = 5
-MODEL_NAME = 'DNN_seqNet_LeakyReLU-TESTING'
+MODEL_NAME = 'DNN_seqNet_Sweeps'
 
 # wandb init
 config = {
-    "learning_rate": LR,
-    "epochs": EPOCHS,
-    "batch_size": BATCH_SIZE,
-    "neurons": NEURONS,
-    "dropout": DROPOUT,
-    "kfolds": FOLDS
+    "learning_rate": 0.0003,
+    "epochs": 640,
+    "batch_size": 32,
+    "neurons": 64,
+    "dropout": 0.2,
+    "kfolds": 5,
+    "group": 1,
 }
 
+BATCH_SIZE = config['batch_size']
+NEURONS = config['neurons']
+LR = config['learning_rate']
+EPOCHS = config['epochs']
+DROPOUT = config['dropout']
+FOLDS = config['kfolds']
 
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
@@ -68,18 +69,17 @@ features = df.to_numpy(dtype='float32')
 # * ---------- Initialization ---------- * #
 dataset = fun.myDataset(features, targets)
 
-model = fun.DNN_seqNet(7, 1, NEURONS, DROPOUT)
+model = fun.DNN_seqNet(7, 1, config['neurons'], config['dropout'])
 
 criterion = nn.L1Loss()
-optimizer = torch.optim.RMSprop(model.parameters(), lr=LR)
+optimizer_name = 'RMSprop'
+optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=config['learning_rate'])
 
 
 # * ---------- Cross Validation ---------- * #
-
-kf = KFold(n_splits=FOLDS, shuffle=True, random_state=SEED)
-
 train_losses = []
 valid_losses = []
+kf = KFold(n_splits=config['kfolds'], shuffle=True, random_state=SEED)
 f_loop = enumerate(kf.split(dataset))
 for fold, (train_ids, valid_ids) in f_loop:
     print(f'\n---------- * ----------')
@@ -99,12 +99,12 @@ for fold, (train_ids, valid_ids) in f_loop:
     # Define data loaders for training and testing data in this fold
     train_loader = DataLoader(
         dataset,
-        batch_size=BATCH_SIZE,
+        batch_size=config['batch_size'],
         sampler=train_sampler
     )
     valid_loader = DataLoader(
         dataset,
-        batch_size=BATCH_SIZE,
+        batch_size=config['batch_size'],
         sampler=valid_sampler
     )
 
@@ -112,7 +112,7 @@ for fold, (train_ids, valid_ids) in f_loop:
     model.apply(fun.reset_weights)
 
     # training loop
-    loop = tqdm(range(EPOCHS))
+    loop = tqdm(range(config['epochs']))
     for epoch in loop:
         # Starting Training...
         train_loss = fun.fitTraining(model, train_loader, criterion, optimizer)
@@ -132,7 +132,7 @@ for fold, (train_ids, valid_ids) in f_loop:
             })
 
         # update progress bar
-        loop.set_description(f'Current epoch: {epoch}/{EPOCHS}')
+        loop.set_description(f'Current epoch: {epoch}')
         loop.set_postfix(train_loss = train_loss, valid_loss = valid_loss)
 
     print('Training process has finished. Saving trained model...')
@@ -148,7 +148,7 @@ for fold, (train_ids, valid_ids) in f_loop:
     leaf.finish()
 
 # Print fold results
-print(f'K-FOLD CROSS VALIDATION RESULTS FOR {FOLDS} FOLDS')
+print(f'K-FOLD CROSS VALIDATION RESULTS')
 print('--------------------------------')
 mean_train_loss = fun.meanie(train_losses)
 mean_valid_loss = fun.meanie(valid_losses)
