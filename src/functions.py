@@ -31,23 +31,20 @@ class myDataset(Dataset):
         return self.features[index], self.targets[index]
 
 
-class 
-
-
 class DNN_seqNet(nn.Module):
     def __init__(self, in_dims, out_dims, neurons, dropout) -> None:
         super().__init__()
         self.seq_01 = nn.modules.Sequential(
             nn.Linear(in_dims, neurons),
-            nn.Tanh(),
+            nn.LeakyReLU(),
             nn.Dropout(dropout),
 
             nn.Linear(neurons, neurons),
-            nn.Tanh(),
+            nn.LeakyReLU(),
             nn.Dropout(dropout),
 
             nn.Linear(neurons, neurons),
-            nn.Tanh(),
+            nn.LeakyReLU(),
 
             nn.Linear(neurons, out_dims),
         )

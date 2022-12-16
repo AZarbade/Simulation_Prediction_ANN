@@ -7,9 +7,8 @@ import os
 import torch
 import torch.nn as nn
 import torchmetrics as tm
-from torch.utils.data import Dataset, DataLoader, SubsetRandomSampler
+from torch.utils.data import DataLoader, SubsetRandomSampler
 
-from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from tqdm import tqdm
 
@@ -28,8 +27,8 @@ import functions as fun
 # ///TODO:     - data normalization
 # TODO: Design =>
 # ///TODO:     - K-Fold for training
-# TODO:     - Establish benchmarks
-# TODO:     - Low capacity network
+# TODO:     - Establish oneFunction benchmarks
+# ///TODO:     - Low capacity network
 
 # * ---------- Project Parameters ---------- * #
 
@@ -42,7 +41,7 @@ LR = 0.003
 EPOCHS = 100
 DROPOUT = 0.2
 FOLDS = 5
-MODEL_NAME = 'DNN_seqNet_1'
+MODEL_NAME = 'DNN_seqNet_LeakyReLU-TESTING'
 
 # wandb init
 config = {
@@ -65,94 +64,11 @@ df = normalize.normalize(df)
 targets = df.pop('DI').to_numpy(dtype='float32').reshape(-1, 1)
 features = df.to_numpy(dtype='float32')
 
-# * ---------- Functions ---------- * #
-class myDataset(Dataset):
-    def __init__(self, features, targets):
-        self.features = features
-        self.targets = targets
-
-    def __len__(self):
-        return len(self.features)
-
-    def __getitem__(self, index):
-        return self.features[index], self.targets[index]
-
-
-class DNN_seqNet(nn.Module):
-    def __init__(self, in_dims, out_dims, neurons, dropout) -> None:
-        super().__init__()
-        self.seq_01 = nn.modules.Sequential(
-            nn.Linear(in_dims, neurons),
-            nn.Tanh(),
-            nn.Dropout(dropout),
-
-            nn.Linear(neurons, neurons),
-            nn.Tanh(),
-            nn.Dropout(dropout),
-
-            nn.Linear(neurons, neurons),
-            nn.Tanh(),
-
-            nn.Linear(neurons, out_dims),
-        )
-    
-    def forward(self, features):
-        features = self.seq_01(features)
-        return features
-
-
-def fitTraining(model, dataloader, loss_fn, optimizer):
-    train_loss = 0
-    size = len(dataloader)
-    model.train()
-    for data, labels in dataloader:
-        pred = model(data)
-
-        loss = loss_fn(pred, labels)
-
-        loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
-
-        train_loss += loss.item()
-    
-    return train_loss / size
-
-
-def fitValidate(model, dataloader, loss_fn):
-    size = len(dataloader)
-    valid_loss = 0
-    model.eval()
-    for data, labels in dataloader:
-        pred = model(data)
-
-        loss = loss_fn(pred, labels)
-
-        valid_loss += loss.item()
-    
-    return valid_loss / size
-
-
-def meanie(answer):
-    mean = sum(answer) / len(answer)
-    return mean
-
-
-def reset_weights(m):
-  '''
-    Try resetting model weights to avoid
-    weight leakage.
-  '''
-  for layer in m.children():
-   if hasattr(layer, 'reset_parameters'):
-    print(f'Reset trainable parameters of layer = {layer}')
-    layer.reset_parameters()
-
 
 # * ---------- Initialization ---------- * #
-dataset = myDataset(features, targets)
+dataset = fun.myDataset(features, targets)
 
-model = DNN_seqNet(7, 1, NEURONS, DROPOUT)
+model = fun.DNN_seqNet(7, 1, NEURONS, DROPOUT)
 
 criterion = nn.L1Loss()
 optimizer = torch.optim.RMSprop(model.parameters(), lr=LR)
@@ -183,27 +99,27 @@ for fold, (train_ids, valid_ids) in f_loop:
     # Define data loaders for training and testing data in this fold
     train_loader = DataLoader(
         dataset,
-        batch_size=10,
+        batch_size=BATCH_SIZE,
         sampler=train_sampler
     )
     valid_loader = DataLoader(
         dataset,
-        batch_size=10,
+        batch_size=BATCH_SIZE,
         sampler=valid_sampler
     )
 
     # init neural network
-    model.apply(reset_weights)
+    model.apply(fun.reset_weights)
 
     # training loop
     loop = tqdm(range(EPOCHS))
     for epoch in loop:
         # Starting Training...
-        train_loss = fitTraining(model, train_loader, criterion, optimizer)
+        train_loss = fun.fitTraining(model, train_loader, criterion, optimizer)
 
         # Starting Validation...
         with torch.no_grad():
-            valid_loss = fitValidate(model, valid_loader, criterion)
+            valid_loss = fun.fitValidate(model, valid_loader, criterion)
 
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
@@ -234,7 +150,7 @@ for fold, (train_ids, valid_ids) in f_loop:
 # Print fold results
 print(f'K-FOLD CROSS VALIDATION RESULTS FOR {FOLDS} FOLDS')
 print('--------------------------------')
-mean_train_loss = meanie(train_losses)
-mean_valid_loss = meanie(valid_losses)
+mean_train_loss = fun.meanie(train_losses)
+mean_valid_loss = fun.meanie(valid_losses)
 print(f'mean_train_loss: {mean_train_loss}')
 print(f'mean_valid_loss: {mean_valid_loss}')
