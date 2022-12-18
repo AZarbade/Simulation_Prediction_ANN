@@ -160,7 +160,5 @@ cython_debug/
 #.idea/
 
 # Excluded folders
-data/
-models/
 wandb/
 logs/
