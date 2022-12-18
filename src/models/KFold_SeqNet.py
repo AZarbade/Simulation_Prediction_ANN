@@ -25,7 +25,7 @@ import dataUtils.functions as fun
 TRAIN_SET = 'data/train.csv'
 # SEED = 1024
 VAL_SPLIT = 0.2
-MODEL_NAME = 'DNN_seqNet_seeded'
+MODEL_NAME = 'DNN_seqNet'
 
 # wandb init
 config = {
@@ -71,9 +71,12 @@ for fold, (train_ids, valid_ids) in f_loop:
                         project="HVIS-redesign",
                         config=config)
 
-    seed_gen = np.random.randint(64,1024)
-    print(seed_gen)
-    kf.random_state = seed_gen
+    # seed_gen = np.random.randint(64,1024)
+    # print(seed_gen)
+    # kf.random_state = seed_gen
+    seeds = [210, 987, 720, 667, 622, 768, 854, 189, 417, 362, 120, 115, 164, 539, 990]
+    running_seed = seeds[fold]
+    kf.random_state = running_seed
 
     # Sample elements randomly from a given list of ids, no replacement
     train_sampler = SubsetRandomSampler(train_ids)
@@ -111,7 +114,7 @@ for fold, (train_ids, valid_ids) in f_loop:
         wandb.log({
             "train loss": train_loss,
             "valid loss": valid_loss,
-            "running seed": seed_gen,
+            "running seed": running_seed,
             "epoch": epoch
             })
 
@@ -121,7 +124,7 @@ for fold, (train_ids, valid_ids) in f_loop:
 
     print('Training process has finished. Saving trained model...')
     # saving model
-    save_path = f'models_outs/{MODEL_NAME}_Seed{seed_gen}__fold#{fold}.pth'
+    save_path = f'models_outs/{MODEL_NAME}_Seed{running_seed}__fold#{fold}.pth'
     torch.save(model.state_dict(), save_path)
 
     # Print results
