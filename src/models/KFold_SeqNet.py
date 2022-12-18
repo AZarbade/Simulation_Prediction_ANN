@@ -23,9 +23,9 @@ import dataUtils.functions as fun
 # * ---------- Project Parameters ---------- * #
 
 TRAIN_SET = 'data/train.csv'
-SEED = 1024
+# SEED = 1024
 VAL_SPLIT = 0.2
-MODEL_NAME = 'DNN_seqNet'
+MODEL_NAME = 'DNN_seqNet_seeded'
 
 # wandb init
 config = {
@@ -34,40 +34,32 @@ config = {
     "batch_size": 32,
     "neurons": 64,
     "dropout": 0.2,
-    "kfolds": 5,
-    "group": 1,
+    "kfolds": 15,
 }
-
-BATCH_SIZE = config['batch_size']
-NEURONS = config['neurons']
-LR = config['learning_rate']
-EPOCHS = config['epochs']
-DROPOUT = config['dropout']
-FOLDS = config['kfolds']
 
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
 df = impute.impute(df, cols='DI')
 df = pd.get_dummies(df, columns=['LD'])
-df = normalize.normalize(df)
+# df = normalize.normalize(df)
 
 # seperating features and targets
 targets = df.pop('DI').to_numpy(dtype='float32').reshape(-1, 1)
 features = df.to_numpy(dtype='float32')
 
 # * ---------- Initialization ---------- * #
-dataset = fun.myDataset(features, targets)
-
 model = fun.DNN_seqNet(7, 1, config['neurons'], config['dropout'])
 
-criterion = nn.L1Loss()
-optimizer_name = 'RMSprop'
+criterion = nn.MSELoss()
+optimizer_name = 'AdamW'
 optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=config['learning_rate'])
 
 # * ---------- Cross Validation ---------- * #
+dataset = fun.myDataset(features, targets)
+
 train_losses = []
 valid_losses = []
-kf = KFold(n_splits=config['kfolds'], shuffle=True, random_state=SEED)
+kf = KFold(n_splits=config['kfolds'], shuffle=True)
 f_loop = enumerate(kf.split(dataset))
 for fold, (train_ids, valid_ids) in f_loop:
     print(f'\n---------- * ----------')
@@ -78,6 +70,10 @@ for fold, (train_ids, valid_ids) in f_loop:
                         name=f'fold_{fold}',
                         project="HVIS-redesign",
                         config=config)
+
+    seed_gen = np.random.randint(64,1024)
+    print(seed_gen)
+    kf.random_state = seed_gen
 
     # Sample elements randomly from a given list of ids, no replacement
     train_sampler = SubsetRandomSampler(train_ids)
@@ -115,6 +111,7 @@ for fold, (train_ids, valid_ids) in f_loop:
         wandb.log({
             "train loss": train_loss,
             "valid loss": valid_loss,
+            "running seed": seed_gen,
             "epoch": epoch
             })
 
@@ -124,7 +121,7 @@ for fold, (train_ids, valid_ids) in f_loop:
 
     print('Training process has finished. Saving trained model...')
     # saving model
-    save_path = f'models_outs/{MODEL_NAME}_fold#{fold}.pth'
+    save_path = f'models_outs/{MODEL_NAME}_Seed{seed_gen}__fold#{fold}.pth'
     torch.save(model.state_dict(), save_path)
 
     # Print results
