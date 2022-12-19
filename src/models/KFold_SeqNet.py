@@ -67,9 +67,9 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'FOLD {fold}')
 
     MODEL_NAME = MODEL_NAME
-    leaf = wandb.init(group=f'w/ impute',
+    leaf = wandb.init(group=f'no_preprocessing',
                         name=f'fold_{fold}',
-                        project="sandbox",
+                        project="HVIS-testing",
                         config=config)
 
     # seed_gen = np.random.randint(64,1024)
