@@ -40,7 +40,7 @@ config = {
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
 df = impute.impute(df, cols='DI')
-df = pd.get_dummies(df, columns=['LD'])
+# df = pd.get_dummies(df, columns=['LD'])
 # df = normalize.normalize(df)
 
 # seperating features and targets
@@ -48,7 +48,8 @@ targets = df.pop('DI').to_numpy(dtype='float32').reshape(-1, 1)
 features = df.to_numpy(dtype='float32')
 
 # * ---------- Initialization ---------- * #
-model = fun.DNN_seqNet(7, 1, config['neurons'], config['dropout'])
+in_dims = features.shape[1]
+model = fun.DNN_seqNet(in_dims, 1, config['neurons'], config['dropout'])
 
 criterion = nn.MSELoss()
 optimizer_name = 'AdamW'
@@ -66,9 +67,9 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'FOLD {fold}')
 
     MODEL_NAME = MODEL_NAME
-    leaf = wandb.init(group=f'{MODEL_NAME}',
+    leaf = wandb.init(group=f'w/ impute',
                         name=f'fold_{fold}',
-                        project="HVIS-redesign",
+                        project="sandbox",
                         config=config)
 
     # seed_gen = np.random.randint(64,1024)
@@ -110,10 +111,16 @@ for fold, (train_ids, valid_ids) in f_loop:
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
 
+        # RMSE as scoring parameter
+        train_score = np.sqrt(train_loss)
+        valid_score = np.sqrt(valid_loss)
+
         # wandb loggers
         wandb.log({
             "train loss": train_loss,
             "valid loss": valid_loss,
+            "train score": train_score,
+            "valid score": valid_score,
             "running seed": running_seed,
             "epoch": epoch
             })
