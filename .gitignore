@@ -164,3 +164,4 @@ wandb/
 logs/
 sandbox/
 models_outs/
+data/
