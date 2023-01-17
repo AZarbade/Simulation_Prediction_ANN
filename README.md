@@ -14,12 +14,14 @@
 
 ## 🛠 Current Implimentation
 
-- **[TITLE](LINK)** - TEXT HERE
+- **[Multi Layer Perceptron - MLP](LINK)** - A simple MLP neural network is being used to predict the results. Hyper-parmeters were tunned to minimize the validation loss.
 
 ---
 
 ## 💪 To - Do
 
-- **[TITLE](LINK)** - TEXT HERE
+- Proper experiment logging
+- Report and findings #1
+- Testing MLP model against other methods and models
 
 ---
