@@ -14,7 +14,7 @@
 
 ## 🛠 Current Implimentation
 
-- **[Multi Layer Perceptron - MLP](LINK)** - A simple MLP neural network is being used to predict the results. Hyper-parmeters were tunned to minimize the validation loss.
+- **[Multi Layer Perceptron - MLP](LINK)** - A simple MLP neural network is being used to predict the results. Hyper-parmeters were tunned to minimize the validation loss. K-Fold method is used to circulate data points and average out scores over 15 runs.
 
 ---
 
