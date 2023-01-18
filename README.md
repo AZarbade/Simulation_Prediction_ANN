@@ -20,8 +20,8 @@
 
 ## 💪 To - Do
 
-- Proper experiment logging
-- Report and findings #1
-- Testing MLP model against other methods and models
+- [ ] Proper experiment logging
+- [ ] Report and findings #1
+- [ ] Testing MLP model against other methods and models
 
 ---
