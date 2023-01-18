@@ -168,3 +168,4 @@ data/
 
 # Exclude extensions
 *.pdf:Zone.Identifier
+*.Identifier
