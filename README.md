@@ -15,13 +15,15 @@
 ## 🛠 Current Implimentation
 
 - **[Multi Layer Perceptron - MLP](LINK)** - A simple MLP neural network is being used to predict the results. Hyper-parmeters were tunned to minimize the validation loss. K-Fold method is used to circulate data points and average out scores over 15 runs.
+- **[Baseline](https://wandb.ai/wrongcolor/HVIS_Baseline?workspace=user-wrongcolor)** - Baseline view and logs for neural network model. Here, Loss: mean_squared_error and root_mean_squared_error.
+- **[Pre-Processing Check](https://wandb.ai/wrongcolor/HVIS_PreProcessingCheck?workspace=user-wrongcolor)** - Detailed view and logs for checking **impact of pre-processing on loss**. Here, Loss: mean_squared_error and root_mean_squared_error.
 
 ---
 
 ## 💪 To - Do
 
-- Proper experiment logging
-- Report and findings #1
-- Testing MLP model against other methods and models
+- [x] ~Proper experiment logging~
+- [ ] Report and findings #1
+- [ ] Testing MLP model against other methods and models
 
 ---
