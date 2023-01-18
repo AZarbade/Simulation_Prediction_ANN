@@ -40,8 +40,8 @@ config = {
 # * ---------- Data (pre)Processing ---------- * #
 df = pd.read_csv(TRAIN_SET, index_col=[0])
 df = impute.impute(df, cols='DI')
-# df = pd.get_dummies(df, columns=['LD'])
-# df = normalize.normalize(df)
+df = pd.get_dummies(df, columns=['LD'])
+df = normalize.normalize(df)
 
 # seperating features and targets
 targets = df.pop('DI').to_numpy(dtype='float32').reshape(-1, 1)
@@ -67,10 +67,11 @@ for fold, (train_ids, valid_ids) in f_loop:
     print(f'FOLD {fold}')
 
     MODEL_NAME = MODEL_NAME
-    leaf = wandb.init(group=f'no_preprocessing',
-                        name=f'fold_{fold}',
-                        project="HVIS-testing",
-                        config=config)
+    leaf = wandb.init(
+        # group=f'impute&OHC&normalization',
+        name=f'fold_{fold}',
+        project='HVIS_Baseline',
+        config=config)
 
     # seed_gen = np.random.randint(64,1024)
     # print(seed_gen)
@@ -112,15 +113,15 @@ for fold, (train_ids, valid_ids) in f_loop:
         valid_losses.append(valid_loss)
 
         # RMSE as scoring parameter
-        train_score = np.sqrt(train_loss)
-        valid_score = np.sqrt(valid_loss)
+        train_rmse = np.sqrt(train_loss)
+        valid_rmse = np.sqrt(valid_loss)
 
         # wandb loggers
         wandb.log({
             "train loss": train_loss,
             "valid loss": valid_loss,
-            "train score": train_score,
-            "valid score": valid_score,
+            "train rmse": train_rmse,
+            "valid rmse": valid_rmse,
             "running seed": running_seed,
             "epoch": epoch
             })
