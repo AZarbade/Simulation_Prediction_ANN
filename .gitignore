@@ -165,3 +165,6 @@ logs/
 sandbox/
 models_outs/
 data/
+
+# Exclude extensions
+*.pdf:Zone.Identifier
