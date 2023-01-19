@@ -22,8 +22,8 @@
 
 ## 💪 To - Do
 
-- [x] ~Proper experiment logging~
-- [ ] Report and findings #1
+- [x] Proper experiment logging - Done with weights and biases <img height="16" width="16" src="https://cdn.simpleicons.org/weightsandbiases" style="vertical-align: bottom;"/>
+- [x] Report and findings #1
 - [ ] Testing MLP model against other methods and models
     - [ ] [RandomForest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
     - [ ] [XGBoost](https://xgboost.readthedocs.io/en/stable/index.html)
