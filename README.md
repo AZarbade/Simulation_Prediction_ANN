@@ -23,19 +23,18 @@
 ## 💪 To - Do
 
 - [x] ~Proper experiment logging~
-- [ ] Report and findings #1
+- [x] Report and findings #1
 - [ ] Testing MLP model against other methods and models
-    - [ ] [RandomForest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
-    - [ ] [XGBoost](https://xgboost.readthedocs.io/en/stable/index.html)
-    - [ ] [Revisiting Deep Learning Models for Tabular Data](https://wandb.ai/sauravm/RTDL/reports/Revisiting-Deep-Learning-Models-for-Tabular-Data--VmlldzoxNDE1Njk0)
-    - [ ] [TabNet](https://www.aaai.org/AAAI21Papers/AAAI-1063.ArikS.pdf)
-    - [ ] [GrowNet](https://arxiv.org/abs/2002.07971)
-    - [ ] [Tree Ensemble Layers](https://arxiv.org/abs/2002.07772v2)
-    - [ ] [TabTransformers](https://arxiv.org/abs/2012.06678)
-    - [ ] [Self Normalizing NN](https://arxiv.org/abs/1706.02515v5)
-    - [ ] [Neural Oblivious Decision Ensembles](https://arxiv.org/abs/1909.06312)
-    - [ ] [AutoInt](https://arxiv.org/abs/1810.11921v2)
-    - [ ] [Deep and Cross NN](https://dl.acm.org/doi/pdf/10.1145/3124749.3124754)
-
+  - [x] [RTDL - Revisiting Deep Learning Models for Tabular Data](https://arxiv.org/abs/2106.11959)
+  - [ ] [RandomForest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
+  - [ ] [XGBoost](https://xgboost.readthedocs.io/en/stable/index.html)
+  - [ ] [TabNet](https://www.aaai.org/AAAI21Papers/AAAI-1063.ArikS.pdf)
+  - [ ] [GrowNet](https://arxiv.org/abs/2002.07971)
+  - [ ] [Tree Ensemble Layers](https://arxiv.org/abs/2002.07772v2)
+  - [ ] [TabTransformers](https://arxiv.org/abs/2012.06678)
+  - [ ] [Self Normalizing NN](https://arxiv.org/abs/1706.02515v5)
+  - [ ] [Neural Oblivious Decision Ensembles](https://arxiv.org/abs/1909.06312)
+  - [ ] [AutoInt](https://arxiv.org/abs/1810.11921v2)
+  - [ ] [Deep and Cross NN](https://dl.acm.org/doi/pdf/10.1145/3124749.3124754)
 
 ---
