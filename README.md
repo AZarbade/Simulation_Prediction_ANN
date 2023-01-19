@@ -25,6 +25,8 @@
 - [x] ~Proper experiment logging~
 - [ ] Report and findings #1
 - [ ] Testing MLP model against other methods and models
+    - [ ] [RandomForest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
+    - [ ] [XGBoost](https://xgboost.readthedocs.io/en/stable/index.html)
     - [ ] [Revisiting Deep Learning Models for Tabular Data](https://wandb.ai/sauravm/RTDL/reports/Revisiting-Deep-Learning-Models-for-Tabular-Data--VmlldzoxNDE1Njk0)
     - [ ] [TabNet](https://www.aaai.org/AAAI21Papers/AAAI-1063.ArikS.pdf)
     - [ ] [GrowNet](https://arxiv.org/abs/2002.07971)
