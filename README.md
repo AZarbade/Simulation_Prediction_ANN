@@ -25,7 +25,7 @@
 
 - [x] ~Proper experiment logging~
 - [x] Report and findings #1
-- [ ] Testing models:
+- [ ] [Testing models](https://wandb.ai/wrongcolor/hvis_rtdl_baseline?workspace=user-wrongcolor)
   - [x] [MLP](https://arxiv.org/pdf/2106.11959.pdf)
   - [x] [ResNet](https://arxiv.org/pdf/2106.11959.pdf)
   - [x] [FT-Transformer](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
