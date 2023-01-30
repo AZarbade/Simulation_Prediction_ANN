@@ -70,54 +70,14 @@ if task_type != 'multiclass':
 # model selection
 d_out = 1
 
-model = rtdl.FTTransformer.make_default(
-    n_num_features=X_all.shape[1],
-    cat_cardinalities=None,
-    last_layer_query_idx=[-1],  # it makes the model faster and does NOT affect its output
+model = rtdl.MLP.make_baseline(
+    d_in=X_all.shape[1],
+    d_layers=[128, 256, 128],
+    dropout=0.2,
     d_out=d_out,
 )
-
-# === ABOUT CATEGORICAL FEATURES ===
-# IF you use MLP, ResNet or any other simple feed-forward model (NOT transformer-based model)
-# AND there are categorical features
-# THEN you have to implement a wrapper that handles categorical features.
-# The example below demonstrates how it can be achieved using rtdl.CategoricalFeatureTokenizer.
-# ==================================
-# 1. When you have both numerical and categorical features, you should prepare you data like this:
-#    (X_num<float32>, X_cat<int64>) instead of X<float32>
-#    Each column in X_cat should contain values within the range from 0 to <(the number of unique values in column) - 1>;
-#    use sklean.preprocessing.OrdinalEncoder to achieve this;
-# 2. Prepare a list of so called "cardinalities":
-#    cardinalities[i] = <the number of unique values of the i-th categorical feature>
-# 3. See the commented example below and adapt it for your needs.
-#
-# class Model(nn.Module):
-#     def __init__(
-#         self,
-#         n_num_features: int,
-#         cat_tokenizer: rtdl.CategoricalFeatureTokenizer,
-#         mlp_kwargs: Dict[str, Any],
-#     ):
-#         super().__init__()
-#         self.cat_tokenizer = cat_tokenizer
-#         self.model = rtdl.MLP.make_baseline(
-#             d_in=n_num_features + cat_tokenizer.n_tokens * cat_tokenizer.d_token,
-#             **mlp_kwargs,
-#         )
-#
-#     def forward(self, x_num, x_cat):
-#         return self.model(
-#             torch.cat([x_num, self.cat_tokenizer(x_cat).flatten(1, -1)], dim=1)
-#         )
-#
-# model = Model(
-#     # `None` means "Do not transform numerical features"
-#     # `d_token` is the size of embedding for ONE categorical feature
-#     X_num_all.shape[1],
-#     rtdl.CategoricalFeatureTokenizer(cardinalities, d_token, True, 'uniform'),
-#     mlp_kwargs,
-# )
-# Then the model should be used as `model(x_num, x_cat)` instead of of `model(x)`.
+lr = 0.001
+weight_decay = 0.0
 
 model.to(device)
 optimizer = (
