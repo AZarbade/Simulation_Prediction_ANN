@@ -1,4 +1,3 @@
-# WIP
 <h1 align="center">Simulation Results Prediction using Neural Networks</h1>
 <h3 align="center">Use of Neural Networks in Analysis and Simulation field</h3>
 
