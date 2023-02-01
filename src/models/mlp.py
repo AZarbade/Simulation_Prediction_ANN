@@ -1,3 +1,5 @@
+from utilities import drdo_data
+
 import numpy as np
 import pandas as pd
 import wandb
@@ -26,38 +28,20 @@ config = {
     "patience": 20
 }
 
-# data import and split
-df = pd.read_csv('data/SIDI_Full.csv')
-
-y_all = df['DI'].astype('float32').to_numpy()
-X_all = df.drop('DI', axis=1).astype('float32').to_numpy()
-
-X = {}
-y = {}
-
-X['train'], X['test'], y['train'], y['test'] = sklearn.model_selection.train_test_split(
-    X_all, y_all, train_size=config['train_split']
-)
-X['train'], X['val'], y['train'], y['val'] = sklearn.model_selection.train_test_split(
-    X['train'], y['train'], train_size=config['train_split']
+df = drdo_data(
+    dataset='data/SIDI_Full.csv',
+    dep_variable='DI',
+    train_split=0.8,
+    device=device
 )
 
-# preprocess features (WIP)
-preprocess = sklearn.preprocessing.QuantileTransformer()
-preprocess.fit(X['train'])
-
-X = {k: torch.tensor(preprocess.transform(v), device=device) for k, v in X.items()}
-y = {k: torch.tensor(v, device=device) for k, v in y.items()}
-
-y_mean = y['train'].mean().item()
-y_std = y['train'].std().item()
-y = {k: (v - y_mean) / y_std for k, v in y.items()}
+print(len(df))
 
 # model selection
 d_out = 1
 
 model = rtdl.MLP.make_baseline(
-    d_in=X_all.shape[1],
+    d_in=df.X['train'].shape[1],
     d_layers=[config['neurons'], config['neurons']],
     dropout=config['dropout'],
     d_out=d_out,
@@ -74,14 +58,14 @@ loss_fn = torch.nn.MSELoss()
 @torch.no_grad()
 def evaluate(part):
     model.eval()
-    pred = model(X[part]).squeeze(1)
-    target = y[part]
+    pred = model(df.X[part]).squeeze(1)
+    target = df.y[part]
     score = loss_fn(pred, target)
     return score
 
 # Create a dataloader for batches of indices
 batch_size = config['batch_size']
-train_loader = delu.data.make_index_dataloader(len(X['train']), config['batch_size'])
+train_loader = delu.data.make_index_dataloader(len(df.X['train']), config['batch_size'])
 
 # Create a progress tracker for early stopping
 progress = delu.ProgressTracker(config['patience'])
@@ -90,7 +74,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f'model_{model.__class__.__name__}',
-    project='hvis_rtdl_baseline',
+    # project='hvis_rtdl_baseline',
+    project='testing',
     config=config)
 
 n_epochs = config['epochs']
@@ -98,8 +83,8 @@ for epoch in range(n_epochs):
     for iteration, batch_idx in enumerate(train_loader):
         model.train()
         optimizer.zero_grad()
-        x_batch = X['train'][batch_idx]
-        y_batch = y['train'][batch_idx]
+        x_batch = df.X['train'][batch_idx]
+        y_batch = df.y['train'][batch_idx]
         loss = loss_fn(model(x_batch).squeeze(1), y_batch)
         loss.backward()
         optimizer.step()
