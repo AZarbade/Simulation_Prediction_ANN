@@ -1,3 +1,5 @@
+from utilities import drdo_data
+
 import numpy as np
 import pandas as pd
 import wandb
@@ -20,46 +22,24 @@ config = {
     "epochs": 1000,
     "batch_size": 32,
     "neurons": 64,
-    "dropout_1st": 0.2,
-    "dropout_2nd": 0.0,
+    "dropout": 0.2,
     "train_split": 0.8,
     "weight_decay": 0.0,
-    "patience": 20,
-    "res_blocks": 2
+    "patience": 20
 }
 
-# data import and split
-df = pd.read_csv('data/SIDI_Full.csv')
-
-y_all = df['DI'].astype('float32').to_numpy()
-X_all = df.drop('DI', axis=1).astype('float32').to_numpy()
-
-X = {}
-y = {}
-
-X['train'], X['test'], y['train'], y['test'] = sklearn.model_selection.train_test_split(
-    X_all, y_all, train_size=config['train_split']
+df = drdo_data(
+    dataset='data/SIDI_Full.csv',
+    dep_variable='DI',
+    train_split=0.8,
+    device=device
 )
-X['train'], X['val'], y['train'], y['val'] = sklearn.model_selection.train_test_split(
-    X['train'], y['train'], train_size=config['train_split']
-)
-
-# preprocess features (WIP)
-preprocess = sklearn.preprocessing.QuantileTransformer()
-preprocess.fit(X['train'])
-
-X = {k: torch.tensor(preprocess.transform(v), device=device) for k, v in X.items()}
-y = {k: torch.tensor(v, device=device) for k, v in y.items()}
-
-y_mean = y['train'].mean().item()
-y_std = y['train'].std().item()
-y = {k: (v - y_mean) / y_std for k, v in y.items()}
 
 # model selection
 d_out = 1
 
 model = rtdl.ResNet.make_baseline(
-    d_in=X_all.shape[1],
+    d_in=df.X['train'].shape[1],
     d_main=config['neurons'],
     d_hidden=config['neurons'], 
     dropout_first=config['dropout_1st'],
@@ -79,14 +59,14 @@ loss_fn = torch.nn.MSELoss()
 @torch.no_grad()
 def evaluate(part):
     model.eval()
-    pred = model(X[part]).squeeze(1)
-    target = y[part]
+    pred = model(df.X[part]).squeeze(1)
+    target = df.y[part]
     score = loss_fn(pred, target)
     return score
 
 # Create a dataloader for batches of indices
 batch_size = config['batch_size']
-train_loader = delu.data.make_index_dataloader(len(X['train']), config['batch_size'])
+train_loader = delu.data.make_index_dataloader(len(df.X['train']), config['batch_size'])
 
 # Create a progress tracker for early stopping
 progress = delu.ProgressTracker(config['patience'])
@@ -99,15 +79,15 @@ wandb.init(
     config=config)
 
 n_epochs = config['epochs']
-report_frequency = len(X['train']) // batch_size // 5
+report_frequency = len(df.X['train']) // batch_size // 5
 val_scores = []
 test_scores = []
 for epoch in range(1, n_epochs + 1):
     for iteration, batch_idx in enumerate(train_loader):
         model.train()
         optimizer.zero_grad()
-        x_batch = X['train'][batch_idx]
-        y_batch = y['train'][batch_idx]
+        x_batch = df.X['train'][batch_idx]
+        y_batch = df.y['train'][batch_idx]
         loss = loss_fn(model(x_batch).squeeze(1), y_batch)
         loss.backward()
         optimizer.step()

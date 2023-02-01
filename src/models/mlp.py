@@ -35,8 +35,6 @@ df = drdo_data(
     device=device
 )
 
-print(len(df))
-
 # model selection
 d_out = 1
 
