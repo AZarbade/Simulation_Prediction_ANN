@@ -17,6 +17,20 @@
 - **[Impact of Pre-Processing](https://wandb.ai/wrongcolor/HVIS_PreProcessingCheck?workspace=user-wrongcolor)** - Detailed view and logs for checking **impact of pre-processing on loss**. Here, Loss: mean_squared_error and root_mean_squared_error.
 - **[Using RTDL library](https://github.com/Yura52/rtdl)** - Propsed in [Revisiting Deep Learning Models for Tabular Data](https://arxiv.org/abs/2106.11959), this library contains 3 basic neural network implementations to start working on top of.
 
+## 📊 Stats
+
+| Model           | Score ⬇️ |
+| --------------- | ------ |
+| **MLP**         | 0.1149 |
+| **ResNet**      | 0.0873 |
+| **FT-T**        | 0.0481 |
+| **SNN**         | 0.6908 |
+<!-- | **AutoInt**     | 0.474 | -->
+<!-- | **GrowNet**     | 0.487 | -->
+<!-- | **DCN2**        | 0.484 | -->
+<!-- | **NODE**        | 0.464 | -->
+<!-- | **TabNet**      | 0.510 | -->
+
 ---
 
 ## 💪 To - Do
