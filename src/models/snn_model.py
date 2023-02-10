@@ -72,8 +72,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f'model_{model.__class__.__name__}',
-    # project='hvis_rtdl_baseline',
-    project='testing',
+    project='hvis_rtdl_baseline',
+    # project='testing',
     config=config)
 
 n_epochs = config['epochs']
