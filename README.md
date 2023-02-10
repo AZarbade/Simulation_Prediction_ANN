@@ -27,7 +27,7 @@
   - [x] [MLP](https://arxiv.org/pdf/2106.11959.pdf)
   - [x] [ResNet](https://arxiv.org/pdf/2106.11959.pdf)
   - [x] [FT-Transformer](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
-  - [ ] [SNN]()
+  - [x] [SNN](https://arxiv.org/pdf/1706.02515.pdf)
   - [ ] [NODE]()
   - [ ] [TabNet]()
   - [ ] [GrowNet]()
