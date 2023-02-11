@@ -1,0 +1,1 @@
+from .snn_class import SNN_model

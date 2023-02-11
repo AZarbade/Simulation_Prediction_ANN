@@ -1,5 +1,4 @@
 from utilities import drdo_data
-from model_classes import SNN_model
 
 import numpy as np
 import pandas as pd
@@ -37,6 +36,7 @@ df = drdo_data(
 )
 
 # model selection
+from model_classes.snn_lib import SNN_model
 model = SNN_model(
     d_in=4,
     d_out=1,
