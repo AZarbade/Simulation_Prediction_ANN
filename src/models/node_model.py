@@ -36,7 +36,11 @@ df = drdo_data(
 )
 
 # model selection
-model = 'MODEL'
+from model_classes import node_lib
+model = torch.nn.Sequential(
+    node_lib.DenseBlock(4, 2048, num_layers=1, tree_dim=3, depth=6, flatten_output=False,
+                   choice_function=node_lib.entmax15, bin_function=node_lib.entmoid15),
+    node_lib.Lambda(lambda x: x[..., 0].mean(dim=-1)))
 
 model.to(device)
 optimizer = (
@@ -49,7 +53,8 @@ loss_fn = torch.nn.MSELoss()
 @torch.no_grad()
 def evaluate(part):
     model.eval()
-    pred = model(df.X[part]).squeeze(1)
+    # pred = model(df.X[part]).squeeze(1)
+    pred = model(df.X[part])
     target = df.y[part]
     score = loss_fn(pred, target)
     return score
@@ -65,8 +70,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f'model_{model.__class__.__name__}',
-    # project='hvis_rtdl_baseline',
-    project='testing',
+    project='hvis_rtdl_baseline',
+    # project='testing',
     config=config)
 
 n_epochs = config['epochs']
@@ -76,7 +81,8 @@ for epoch in range(n_epochs):
         optimizer.zero_grad()
         x_batch = df.X['train'][batch_idx]
         y_batch = df.y['train'][batch_idx]
-        loss = loss_fn(model(x_batch).squeeze(1), y_batch)
+        # loss = loss_fn(model(x_batch).squeeze(1), y_batch)
+        loss = loss_fn(model(x_batch), y_batch)
         loss.backward()
         optimizer.step()
 
