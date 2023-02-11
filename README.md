@@ -42,7 +42,7 @@
   - [x] [ResNet](https://arxiv.org/pdf/2106.11959.pdf)
   - [x] [FT-Transformer](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
   - [x] [SNN](https://arxiv.org/pdf/1706.02515.pdf)
-  - [ ] [NODE]()
+  - [x] [NODE](https://arxiv.org/pdf/1909.06312.pdf)
   - [ ] [TabNet]()
   - [ ] [GrowNet]()
   - [ ] [DCN V2]()
