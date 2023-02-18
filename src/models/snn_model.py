@@ -21,11 +21,13 @@ config = {
     "learning_rate": 0.0003,
     "epochs": 1000,
     "batch_size": 32,
-    "neurons": 64,
+    # "neurons": 64,
     "dropout": 0.2,
     "train_split": 0.8,
     "weight_decay": 0.0,
-    "patience": 20
+    "patience": 100,
+    "layers": 16,
+    "hidden": 4,
 }
 
 df = drdo_data(
@@ -40,9 +42,9 @@ from model_classes.snn_lib import SNN_model
 model = SNN_model(
     d_in=4,
     d_out=1,
-    d_hidden=8,
-    dropout=0.2,
-    n_layers=4
+    d_hidden=config['hidden'],
+    dropout=config['dropout'],
+    n_layers=config['layers']
 )
 
 model.to(device)
@@ -71,9 +73,9 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 
 # wandb init
 wandb.init(
-    name=f'model_{model.__class__.__name__}',
-    project='hvis_rtdl_baseline',
-    # project='testing',
+    name=f"model_{model.__class__.__name__}",
+    # project='hvis_rtdl_baseline',
+    project='snn_sweep',
     config=config)
 
 n_epochs = config['epochs']
