@@ -26,8 +26,8 @@ config = {
     "train_split": 0.8,
     "weight_decay": 0.0,
     "patience": 100,
-    "layers": 16,
-    "hidden": 4,
+    "layers": 32,
+    "hidden": 8,
 }
 
 df = drdo_data(
@@ -74,8 +74,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f"model_{model.__class__.__name__}",
-    # project='hvis_rtdl_baseline',
-    project='snn_sweep',
+    project='hvis_rtdl_baseline',
+    # project='snn_sweep',
     config=config)
 
 n_epochs = config['epochs']
