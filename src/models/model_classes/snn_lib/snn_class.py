@@ -33,9 +33,7 @@ class SNN_model(nn.Module):
                 bound = 1 / math.sqrt(fan_in)
                 nn.init.uniform_(layer.bias, -bound, bound)
 
-    # def reset_parameters(self):
-    #     for param in self.net.parameters():
-    #         if len(param.shape) == 1:
-    #             nn.init.constant_(param, 0)
-    #         else:
-    #             nn.init.kaiming_normal_(param, mode='fan_in', nonlinearity='linear')
+'''
+Credits:
+https://github.com/tonyduan/snn
+'''
