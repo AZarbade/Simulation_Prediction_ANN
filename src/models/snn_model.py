@@ -25,7 +25,7 @@ config = {
     "dropout": 0.2,
     "train_split": 0.8,
     "weight_decay": 0.0,
-    "patience": 100,
+    "patience": 20,
     "layers": 32,
     "hidden": 8,
 }
@@ -44,7 +44,7 @@ model = SNN_model(
     d_out=1,
     d_hidden=config['hidden'],
     dropout=config['dropout'],
-    n_layers=config['layers']
+    n_layers=config['layers'],
 )
 
 model.to(device)

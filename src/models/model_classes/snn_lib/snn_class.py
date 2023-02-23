@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 
 class SNN_model(nn.Module):
-    def __init__(self, d_in, d_hidden, d_out, dropout, n_layers) -> None:
+    def __init__(self, d_in, d_hidden, d_out, dropout, n_layers, use_selu: bool=True) -> None:
         super(SNN_model, self).__init__()
         layers = OrderedDict()
         for i in range(n_layers - 1):
@@ -17,23 +17,21 @@ class SNN_model(nn.Module):
         layers[f'fc_{i + 1}'] = nn.Linear(d_hidden, d_out, bias=True)
 
         self.net = nn.Sequential(layers)
-        self.reset_parameters()
+
+        if use_selu:
+            for param in self.net.parameters():
+                # biases zero
+                if len(param.shape) == 1:
+                    nn.init.constant_(param, 0)
+                # others using lecun-normal initialization
+                else:
+                    nn.init.kaiming_normal_(param, mode='fan_in', nonlinearity='linear')
 
     def forward(self, x):
         x = self.net(x)
         return x
 
-    def reset_parameters(self):
-        for layer in self.net:
-            if not isinstance(layer, nn.Linear):
-                continue
-            nn.init.normal_(layer.weight, std=1 / math.sqrt(layer.out_features))
-            if layer.bias is not None:
-                fan_in, _ = nn.init._calculate_fan_in_and_fan_out(layer.weight)
-                bound = 1 / math.sqrt(fan_in)
-                nn.init.uniform_(layer.bias, -bound, bound)
-
 '''
 Credits:
-https://github.com/tonyduan/snn
+https://github.com/bioinf-jku/SNNs
 '''
