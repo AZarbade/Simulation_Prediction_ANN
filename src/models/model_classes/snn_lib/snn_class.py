@@ -32,6 +32,6 @@ class SNN_model(nn.Module):
 
 '''
 Credits:
-code partially taken from, https://github.com/bioinf-jku/SNNs
+code from, https://github.com/bioinf-jku/SNNs
 and, https://github.com/tonyduan/snn
 '''
