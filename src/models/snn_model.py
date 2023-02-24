@@ -18,7 +18,7 @@ delu.improve_reproducibility(base_seed=1024)
 
 # wandb config
 config = {
-    "learning_rate": 0.0003,
+    "learning_rate": 0.008,
     "epochs": 1000,
     "batch_size": 32,
     # "neurons": 64,
@@ -26,7 +26,7 @@ config = {
     "train_split": 0.8,
     "weight_decay": 0.0,
     "patience": 20,
-    "layers": 32,
+    "layers": 16,
     "hidden": 8,
 }
 
@@ -74,8 +74,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f"model_{model.__class__.__name__}",
-    project='hvis_rtdl_baseline',
-    # project='snn_sweep',
+    # project='hvis_rtdl_baseline',
+    project='testing',
     config=config)
 
 n_epochs = config['epochs']
