@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 
 class SNN_model(nn.Module):
-    def __init__(self, d_in, d_hidden, d_out, dropout, n_layers, use_selu: bool=True) -> None:
+    def __init__(self, d_in, d_hidden, d_out, dropout, n_layers) -> None:
         super(SNN_model, self).__init__()
         layers = OrderedDict()
         for i in range(n_layers - 1):
@@ -18,8 +18,7 @@ class SNN_model(nn.Module):
 
         self.net = nn.Sequential(layers)
 
-        if use_selu:
-            for param in self.net.parameters():
+        for param in self.net.parameters():
                 # biases zero
                 if len(param.shape) == 1:
                     nn.init.constant_(param, 0)
@@ -33,5 +32,6 @@ class SNN_model(nn.Module):
 
 '''
 Credits:
-https://github.com/bioinf-jku/SNNs
+code partially taken from, https://github.com/bioinf-jku/SNNs
+and, https://github.com/tonyduan/snn
 '''
