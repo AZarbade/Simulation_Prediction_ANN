@@ -22,9 +22,11 @@ config = {
     "epochs": 1000,
     "batch_size": 32,
     "neurons": 64,
-    "dropout": 0.2,
+    "dropout_1st": 0.2,
+    "dropout_2nd": 0.2,
     "train_split": 0.8,
     "weight_decay": 0.0,
+    "res_blocks": 64,
     "patience": 20
 }
 
@@ -75,7 +77,8 @@ print(f'Test score before training: {evaluate("test"):.4f}')
 # wandb init
 wandb.init(
     name=f'model_{model.__class__.__name__}',
-    project='hvis_rtdl_baseline',
+    # project='hvis_rtdl_baseline',
+    project='testing',
     config=config)
 
 n_epochs = config['epochs']
