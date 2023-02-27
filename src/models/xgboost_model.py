@@ -30,7 +30,7 @@ config = {
 }
 
 df = drdo_data(
-    dataset='../../data/SIDI_Full.csv',
+    dataset='data/SIDI_Full.csv',
     dep_variable='DI',
     train_split=0.8,
     device=device
@@ -44,8 +44,8 @@ model.fit(df.X['train'], df.y['train'])
 # wandb init
 wandb.init(
     name=f'model_{model.__class__.__name__}',
-    # project='hvis_rtdl_baseline',
-    project='testing',
+    project='hvis_rtdl_baseline',
+    # project='testing',
     # config=config
 )
 
