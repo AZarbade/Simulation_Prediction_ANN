@@ -26,7 +26,7 @@
 | **FT-T**        | 0.0473 |
 | **SNN**         | 0.9773 |
 | **NODE**        | 0.0424 |
-<!-- | **AutoInt**     | 0.474 | -->
+| **XGBoost**     | 0.0462 |
 <!-- | **GrowNet**     | 0.487 | -->
 <!-- | **DCN2**        | 0.484 | -->
 <!-- | **TabNet**      | 0.510 | -->
@@ -43,11 +43,11 @@
   - [x] [FT-Transformer](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
   - [x] [SNN](https://arxiv.org/pdf/1706.02515.pdf)
   - [x] [NODE](https://arxiv.org/pdf/1909.06312.pdf)
-  - [ ] [TabNet]()
+  - [x] [XGBoost]()
   - [ ] [GrowNet]()
   - [ ] [DCN V2]()
   - [ ] [AutoInt]()
-  - [ ] [XGBoost]()
+  - [ ] [TabNet]()
   - [ ] [CatBoost]()
 
 ---
