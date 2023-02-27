@@ -43,11 +43,11 @@
   - [x] [FT-Transformer](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
   - [x] [SNN](https://arxiv.org/pdf/1706.02515.pdf)
   - [x] [NODE](https://arxiv.org/pdf/1909.06312.pdf)
-  - [ ] [TabNet]()
+  - [x] [XGBoost]()
   - [ ] [GrowNet]()
   - [ ] [DCN V2]()
   - [ ] [AutoInt]()
-  - [ ] [XGBoost]()
+  - [ ] [TabNet]()
   - [ ] [CatBoost]()
 
 ---
