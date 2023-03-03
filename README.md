@@ -16,6 +16,7 @@
 - **[Multi Layer Perceptron - MLP](LINK)** - A simple MLP neural network is being used to predict the results. MLP [baseline](https://wandb.ai/wrongcolor/HVIS_Baseline?workspace=user-wrongcolor), here Loss: mean_squared_error and root_mean_squared_error.. Hyper-parmeters were tunned to minimize the validation loss. K-Fold method is used to circulate data points and average out scores over 15 runs.
 - **[Impact of Pre-Processing](https://wandb.ai/wrongcolor/HVIS_PreProcessingCheck?workspace=user-wrongcolor)** - Detailed view and logs for checking **impact of pre-processing on loss**. Here, Loss: mean_squared_error and root_mean_squared_error.
 - **[Using RTDL library](https://github.com/Yura52/rtdl)** - Propsed in [Revisiting Deep Learning Models for Tabular Data](https://arxiv.org/abs/2106.11959), this library contains 3 basic neural network implementations to start working on top of.
+- **[Parameter Domain Reduction and its Imapct](https://wandb.ai/wrongcolor/param_domain?workspace=user-wrongcolor)** - Main purpose of this study is to reduce simulation data overhead. Initially, a reduced parameter domain is used to train and study the models.
 
 ## 📊 Stats
 
