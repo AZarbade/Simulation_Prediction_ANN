@@ -19,7 +19,7 @@
 - **[Parameter Domain Reduction and its Imapct](https://wandb.ai/wrongcolor/param_domain?workspace=user-wrongcolor)** - Main purpose of this study is to reduce simulation data overhead. Initially, a reduced parameter domain is used to train and study the models.
 
 ## 📊 Stats
-
+<!-- 
 | Model           | RMSE   |
 | --------------- | ------ |
 | **MLP**         | 0.1045 |
@@ -31,6 +31,52 @@
 <!-- | **GrowNet**     | 0.487 | -->
 <!-- | **DCN2**        | 0.484 | -->
 <!-- | **TabNet**      | 0.510 | -->
+
+
+<!-- Comparisions <img src="./reports/helpers/W&B%20Chart%203_3_2023,%2011_38_42%20am.svg"> -->
+
+<div style="display: flex; align-items: center;">
+  <div style="flex: 1;">
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>RMSE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>MLP</strong></td>
+          <td>0.1045</td>
+        </tr>
+        <tr>
+          <td><strong>ResNet</strong></td>
+          <td>0.0972</td>
+        </tr>
+        <tr>
+          <td><strong>FT-T</strong></td>
+          <td>0.0473</td>
+        </tr>
+        <tr>
+          <td><strong>SNN</strong></td>
+          <td>0.9773</td>
+        </tr>
+        <tr>
+          <td><strong>NODE</strong></td>
+          <td>0.0424</td>
+        </tr>
+        <tr>
+          <td><strong>XGBoost</strong></td>
+          <td>0.0462</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="flex: 1; margin-left: -300px;">
+    <img src="./reports/helpers/W&B%20Chart%203_3_2023,%2011_38_42%20am.svg" style="width: 100%;">
+  </div>
+</div>
+
 
 ---
 
