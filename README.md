@@ -96,5 +96,5 @@
   - [ ] [AutoInt]()
   - [ ] [TabNet]()
   - [ ] [CatBoost]()
-
+- [ ] Hyper Parameter Tunning for each model
 ---
